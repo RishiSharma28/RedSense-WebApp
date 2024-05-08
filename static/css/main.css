@@ -1,0 +1,11 @@
+*{
+    margin: 0;
+}
+
+#search{
+    margin: auto;
+    height: 30px;
+    width: 50%;
+    position: relative;
+    top: 5px;
+}
