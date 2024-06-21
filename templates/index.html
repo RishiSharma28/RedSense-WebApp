@@ -1,16 +1,168 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .expanded {
+    -webkit-line-clamp: unset;
+  }
+</style>
+{% endblock %} {% block body %}
 
-{% block head %}
+<nav
+  class="flex h-11 border-b-2 border-solid border-slate-900 mt-auto justify-center"
+>
+  <div class="">
+    <a href="https://www.reddit.com/" target="_blank">
+      <img
+        class="w-auto h-auto mt-1"
+        src="/static/images/reddit-logo-reduced.png"
+        alt="Reddit-Logo"
+      />
+    </a>
+  </div>
+</nav>
 
-{% endblock %}
+<div class="lg:container px-6 m-auto">
+  <div class="flex flex-col md:flex-row justify-between gap-3 mt-10">
+    <div
+      class="flex flex-col md:w-5/12 p-5 border-2 border-black rounded-xl h-fit"
+    >
+      <h2 class="text-xl font-bold text-black mb-4">
+        Reddit Subreddit Explorer
+      </h2>
+      <form class="">
+        <div class="form-grp mb-1">
+          <label for="subreddit_name" class="text-gray-700 mr-2"
+            >Subreddit Name:</label
+          >
+          <input
+            type="text"
+            id="subreddit_name"
+            name="subreddit_name"
+            required
+            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 md:w-2/4 rounded-md px-3 py-1 text-gray-700 border border-gray-300 w-full"
+            placeholder="e.g., webdev, AI"
+          />
+        </div>
 
-{% block body %}
+        <div class="form-grp">
+          <label for="num_posts" class="text-gray-700 mr-2"
+            >Number of Posts:</label
+          >
+          <input
+            type="text"
+            id="num_posts"
+            name="num_posts"
+            min="5"
+            required
+            class="shadow-sm focus:ring-indigo-500 md:w-2/4 focus:border-indigo-500 rounded-md px-3 py-1 text-gray-700 border border-gray-300 w-full"
+            placeholder="Enter minimum 5 number"
+          />
+        </div>
 
-<div class="navbar">
-    <form action="/">
-        <input type="text" name="search" id="search">
-    </form>
-    <div class="search"></div>
+        <button
+          class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 mt-2"
+          id="submit_button"
+          type="submit"
+        >
+          Explore
+        </button>
+      </form>
+    </div>
+
+    <div
+      class="border-2 border-black rounded-xl md:w-7/12 box-border py-3 px-2 min-h-52"
+      id="comments"
+    >
+      <div class="text-sm mt-1 text-center mb-2">
+        <p class="font-bold mb-2">Top Comments</p>
+        <div>
+          <span class="mx-1 px-1 bg-green-300">Positive </span>
+          <span class="mx-1 px-1 bg-red-300">Negative</span>
+          <span class="mx-1 px-1 bg-yellow-300">Neutral</span>
+        </div>
+      </div>
+      <div class="line-clamp-3"></div>
+    </div>
+  </div>
+
+  <div class="mt-10 py-10 flex flex-col lg:flex-row gap-14">
+    <div class="lg:w-6/12 w-full">
+      <div class="">
+        <nav class="flex justify-center gap-4">
+          <button
+            type="button"
+            class="px-4 py-2 type1 text-center rounded-xl bg-neutral-200 hover:bg-neutral-300 type-one-btn"
+            data-type="bar"
+          >
+            Bar
+          </button>
+          <button
+            type="button"
+            class="px-4 py-2 type1 text-center rounded-xl bg-neutral-200 hover:bg-neutral-300 type-one-btn"
+            data-type="bubble"
+          >
+            Bubble
+          </button>
+          <button
+            type="button"
+            class="px-4 py-2 type1 text-center rounded-xl bg-neutral-200 hover:bg-neutral-300 type-one-btn"
+            data-type="line"
+          >
+            Line
+          </button>
+        </nav>
+      </div>
+
+      <div
+        class="mt-5 relative h-full shadow-xl shadow-gray-300 border-2 border-gray-500"
+        id="canvas_id"
+        style="position: relative; height: 60vh; width: 100%"
+      >
+        <canvas style="height: 100%; width: 100%" id="sentimentChart1"></canvas>
+      </div>
+    </div>
+
+    <div class="lg:w-6/12 w-full">
+      <div class="">
+        <nav class="flex justify-center gap-4">
+          <button
+            type="button"
+            class="px-4 py-2 type1 text-center rounded-xl bg-neutral-200 hover:bg-neutral-300 type-two-btn"
+            data-type="pie"
+          >
+            Pie
+          </button>
+          <button
+            type="button"
+            class="px-4 py-2 type1 text-center rounded-xl bg-neutral-200 hover:bg-neutral-300 type-two-btn"
+            data-type="polarArea"
+          >
+            Polar
+          </button>
+          <button
+            type="button"
+            class="px-4 py-2 type1 text-center rounded-xl bg-neutral-200 hover:bg-neutral-300 type-two-btn"
+            data-type="doughnut"
+          >
+            Doughnut
+          </button>
+        </nav>
+      </div>
+
+      <div
+        class="mt-5 relative h-full shadow-xl shadow-gray-300 border-2 border-gray-500"
+        id="canvas_id"
+        style="position: relative; height: 60vh; width: 100%"
+      >
+        <canvas style="height: 100%; width: 100%" id="sentimentChart2"></canvas>
+      </div>
+    </div>
+  </div>
 </div>
-
 {% endblock %}
