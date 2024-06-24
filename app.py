@@ -8,27 +8,18 @@ from nltk.stem import SnowballStemmer
 import string
 import os
 
+# Initialize nltk resources
+nltk.download('punkt')
+nltk.download('stopwords')
+
 app = Flask(__name__)
 
 # Load environment variables from .env file
 load_dotenv()
 
-nltk_data_path = os.getenv('NLTK_DATA_PATH')
-
-if nltk_data_path:
-    nltk.data.path.append(nltk_data_path)
-else:
-    print("Warning: NLTK data path not found in environment variable. Downloading resources...")
-    import nltk
-    try:
-        nltk.download('punkt', download_dir=nltk_data_path)  # Download to specified directory (optional)
-    except (nltk.DownloadError, OSError) as e:
-        print(f"Error downloading NLTK resources: {e}")
-
-
 # Initialize PRAW with your Reddit API credentials
-reddit = praw.Reddit(client_id=os.getenv('REDDIT_CLIENT_ID'),
-                     client_secret=os.getenv('REDDIT_CLIENT_SECRET'),
+reddit = praw.Reddit(client_id=os.environ.get('REDDIT_CLIENT_ID'),
+                     client_secret=os.environ.get('REDDIT_CLIENT_SECRET'),
                      user_agent='my-app by u/Significant_Ad_4786')
 
 # Initialize the VADER sentiment analyzer
@@ -130,4 +121,4 @@ def redditSentiments():
     })
                     
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
