@@ -1,16 +1,17 @@
+import os
+import nltk
+
+# Set the NLTK data path to the current directory
+nltk.data.path.append(os.path.dirname(os.path.abspath(r"C:\Users\Admin\OneDrive\Desktop\Resume-Projects\RedSense-Web-App\nltk_data")))
+
+# Rest of imports
 from flask import Flask, render_template, request, redirect, jsonify
 from dotenv import load_dotenv
 import praw
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import nltk
 from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer
 import string
-import os
-
-# Initialize nltk resources
-nltk.download('punkt')
-nltk.download('stopwords')
 
 app = Flask(__name__)
 
