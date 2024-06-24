@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
         posts: parseInt(numPosts.value),
       };
 
-      const response = await fetch("https://red-sense-web-app.vercel.app/redditSentiments", {
+      const response = await fetch("/api/redditSentiments", {
         method: "post",
         body: JSON.stringify(inputData),
         headers: {
