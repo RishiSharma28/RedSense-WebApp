@@ -2,7 +2,7 @@ import os
 import nltk
 
 # Set the NLTK data path to the current directory
-nltk.data.path.append(os.path.dirname(os.path.abspath(r"C:\Users\Admin\OneDrive\Desktop\Resume-Projects\RedSense-Web-App\nltk_data")))
+nltk.data.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Rest of imports
 from flask import Flask, render_template, request, redirect, jsonify
