@@ -13,9 +13,18 @@ app = Flask(__name__)
 # Load environment variables from .env file
 load_dotenv()
 
-# Initialize NLTK resources
-nltk.download('stopwords')
-nltk.download('punkt')
+nltk_data_path = os.getenv('NLTK_DATA_PATH')
+
+if nltk_data_path:
+    nltk.data.path.append(nltk_data_path)
+else:
+    print("Warning: NLTK data path not found in environment variable. Downloading resources...")
+    import nltk
+    try:
+        nltk.download('punkt', download_dir=nltk_data_path)  # Download to specified directory (optional)
+    except (nltk.DownloadError, OSError) as e:
+        print(f"Error downloading NLTK resources: {e}")
+
 
 # Initialize PRAW with your Reddit API credentials
 reddit = praw.Reddit(client_id=os.getenv('REDDIT_CLIENT_ID'),
@@ -106,9 +115,9 @@ def redditSentiments():
     (positive_sentiments, negative_sentiments, neutral_sentiments,
          top_positive_comment, top_negative_comment, top_neutral_comment) = analyze_and_visualize(subreddit_name, num_posts)
 
-    # print('Top Positive Comment',top_positive_comment)
-    # print(top_negative_comment)
-    # print(top_neutral_comment)
+    print('Top Positive Comment',top_positive_comment)
+    print(top_negative_comment)
+    print(top_neutral_comment)
     print(positive_sentiments)
     print(negative_sentiments)
     print(neutral_sentiments)
