@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
         posts: parseInt(numPosts.value),
       };
 
-      const response = await fetch("http://127.0.0.1:5000/redditSentiments", {
+      const response = await fetch("/redditSentiments", {
         method: "post",
         body: JSON.stringify(inputData),
         headers: {
