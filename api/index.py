@@ -1,4 +1,5 @@
 import os
+import logging
 import nltk
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_cors import CORS
@@ -9,11 +10,18 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from nltk.stem import SnowballStemmer
 import string
 
-app = Flask(__name__)
-CORS(app)
-
 # Load environment variables from .env file
 load_dotenv()
+
+DEBUG = os.environ.get('FLASK_ENV') == 'development'
+logging.basicConfig(level=logging.INFO)
+
+
+app = Flask(__name__, template_folder='../templates',static_folder='../static',
+            static_url_path='/static')
+app.config['DEBUG'] = DEBUG
+CORS(app)
+
 
 # Initialize PRAW with your Reddit API credentials
 reddit = praw.Reddit(client_id=os.environ.get('REDDIT_CLIENT_ID'),
@@ -98,12 +106,13 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/redditSentiments', methods=[ 'POST'])
+@app.route('/api/redditSentiments', methods=[ 'POST'])
 def redditSentiments():
     data = request.get_json()
     print(data)
     subreddit_name = data.get('subname')
     num_posts = int(data['posts'])
+    logging.info(f"Received request for subreddit: {subreddit_name}, num_posts: {num_posts}")
         
     (positive_sentiments, negative_sentiments, neutral_sentiments,
          top_positive_comment, top_negative_comment, top_neutral_comment) = analyze_and_visualize(subreddit_name, num_posts)
@@ -121,7 +130,16 @@ def redditSentiments():
         'negative_sentiments':negative_sentiments,
         'neutral_sentiments':neutral_sentiments
     })
-                    
+                   
+# Used for running the app locally and in production
+if __name__ == '__main__':
+    if os.environ.get('FLASK_ENV') == 'development':
+        port = int(os.environ.get('PORT', 5000))
+        app.run(port=port, debug=True)
+    else:
+        # This branch will be used when deploying to Vercel
+        app.run()
+
 # if __name__ == '__main__':
 #     port = int(os.environ.get('PORT', 5000))
-#     app.run(port=port)
+#     app.run(port=port,debug=True)

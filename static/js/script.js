@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const displayComments = function (comments) {
     const commentsColor = ["green", "red", "yellow"];
-    // commentsEl.innerHTML = "";
+    commentsEl.innerHTML = "";
     comments.forEach((comment, i) => {
       const element = `
         <div>

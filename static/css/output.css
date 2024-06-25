@@ -939,20 +939,16 @@ video {
 }
 
 @media (min-width: 768px) {
+  .md\:w-2\/4 {
+    width: 50%;
+  }
+
   .md\:w-5\/12 {
     width: 41.666667%;
   }
 
   .md\:w-7\/12 {
     width: 58.333333%;
-  }
-
-  .md\:w-2\/3 {
-    width: 66.666667%;
-  }
-
-  .md\:w-2\/4 {
-    width: 50%;
   }
 
   .md\:flex-row {
