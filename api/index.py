@@ -18,7 +18,7 @@ DEBUG = os.environ.get('FLASK_ENV') == 'development'
 logging.basicConfig(level=logging.INFO)
 
 # Set the NLTK data path
-nltk.data.path.append(os.path.join(os.getcwd(), 'data'))
+nltk.data.path.append(os.path.join(os.getcwd(), 'nltk_data'))
 
 
 app = Flask(__name__, template_folder='../templates',static_folder='../static',
