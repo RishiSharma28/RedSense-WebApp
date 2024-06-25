@@ -1,16 +1,16 @@
 import os
 import logging
 import nltk
-import ssl
+# import ssl
 
-try:
-    _create_unverified_https_context = ssl._create_unverified_context
-except AttributeError:
-    pass
-else:
-    ssl._create_default_https_context = _create_unverified_https_context
+# try:
+#     _create_unverified_https_context = ssl._create_unverified_context
+# except AttributeError:
+#     pass
+# else:
+#     ssl._create_default_https_context = _create_unverified_https_context
 
-nltk.download('punkt')
+# nltk.download('punkt')
 
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_cors import CORS
@@ -27,6 +27,7 @@ load_dotenv()
 DEBUG = os.environ.get('FLASK_ENV') == 'development'
 logging.basicConfig(level=logging.INFO)
 
+nltk.data.path.append(os.path.join(os.getcwd(),'nltk_data'))
 
 app = Flask(__name__, template_folder='../templates',static_folder='../static',
             static_url_path='/static')
@@ -127,13 +128,6 @@ def redditSentiments():
         
     (positive_sentiments, negative_sentiments, neutral_sentiments,
          top_positive_comment, top_negative_comment, top_neutral_comment) = analyze_and_visualize(subreddit_name, num_posts)
-
-    print('Top Positive Comment',top_positive_comment)
-    print(top_negative_comment)
-    print(top_neutral_comment)
-    print(positive_sentiments)
-    print(negative_sentiments)
-    print(neutral_sentiments)
 
     return  jsonify({
         'comments': [top_positive_comment,top_negative_comment,top_neutral_comment],
