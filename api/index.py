@@ -9,6 +9,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 # from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer
 import string
+from nltk.tokenize import word_tokenize
 
 # Load environment variables from .env file
 load_dotenv()
@@ -16,7 +17,9 @@ load_dotenv()
 DEBUG = os.environ.get('FLASK_ENV') == 'development'
 logging.basicConfig(level=logging.INFO)
 
-nltk.data.path.append(os.path.join(os.getcwd(),'nltk_data'))
+# Set the NLTK data path
+nltk.data.path.append(os.path.join(os.getcwd(), 'data'))
+
 
 app = Flask(__name__, template_folder='../templates',static_folder='../static',
             static_url_path='/static')
