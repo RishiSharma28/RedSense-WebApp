@@ -1,6 +1,17 @@
 import os
 import logging
 import nltk
+import ssl
+
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+nltk.download('punkt')
+
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -109,10 +120,10 @@ def home():
 @app.route('/api/redditSentiments', methods=[ 'POST'])
 def redditSentiments():
     data = request.get_json()
+    logging.info(f"Received data: {data}")
     print(data)
     subreddit_name = data.get('subname')
     num_posts = int(data['posts'])
-    logging.info(f"Received request for subreddit: {subreddit_name}, num_posts: {num_posts}")
         
     (positive_sentiments, negative_sentiments, neutral_sentiments,
          top_positive_comment, top_negative_comment, top_neutral_comment) = analyze_and_visualize(subreddit_name, num_posts)
